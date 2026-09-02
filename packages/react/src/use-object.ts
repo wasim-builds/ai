@@ -185,7 +185,8 @@ export function useObject<
 
       if (!response.ok) {
         throw new Error(
-          (await response.text()) || 'Failed to fetch the response.',
+          (await response.text()) || 'Failed to fetch the response.'),
+>>>>>>> ed64fd760e (fix: use || instead of ?? for empty error response body)
         );
       }
 
