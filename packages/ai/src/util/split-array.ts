@@ -1,3 +1,5 @@
+import { InvalidArgumentError } from '../error/invalid-argument-error';
+
 /**
  * Splits an array into chunks of a specified size.
  *
@@ -8,7 +10,11 @@
  */
 export function splitArray<T>(array: T[], chunkSize: number): T[][] {
   if (chunkSize <= 0) {
-    throw new Error('chunkSize must be greater than 0');
+    throw new InvalidArgumentError({
+      parameter: 'chunkSize',
+      value: chunkSize,
+      message: 'chunkSize must be greater than 0',
+    });
   }
 
   const result = [];
