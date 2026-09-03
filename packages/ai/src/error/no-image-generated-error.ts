@@ -1,4 +1,5 @@
 import { AISDKError } from '@ai-sdk/provider';
+import type { GenerateImageCall } from '../generate-image/types';
 import type { ImageModelResponseMetadata } from '../types/image-model-response-metadata';
 
 const name = 'AI_NoImageGeneratedError';
@@ -19,18 +20,26 @@ export class NoImageGeneratedError extends AISDKError {
    */
   readonly responses: Array<ImageModelResponseMetadata> | undefined;
 
+  /**
+   * The generated image calls for each call.
+   */
+  readonly calls: Array<GenerateImageCall> | undefined;
+
   constructor({
     message = 'No image generated.',
     cause,
     responses,
+    calls,
   }: {
     message?: string;
     cause?: Error;
     responses?: Array<ImageModelResponseMetadata>;
+    calls?: Array<GenerateImageCall>;
   }) {
     super({ name, message, cause });
 
     this.responses = responses;
+    this.calls = calls;
   }
 
   static isInstance(error: unknown): error is NoImageGeneratedError {
