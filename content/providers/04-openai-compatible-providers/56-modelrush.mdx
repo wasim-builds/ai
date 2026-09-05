@@ -1,0 +1,88 @@
+---
+title: ModelRush
+description: Use the ModelRush OpenAI compatible API with the AI SDK.
+---
+
+# ModelRush Provider
+
+[ModelRush](https://modelrush.ai) is an AI gateway that provides access to models through an OpenAI-compatible API. You can use its Chat Completions endpoint with the AI SDK through the `@ai-sdk/openai-compatible` module.
+
+## Setup
+
+The ModelRush provider is available via the `@ai-sdk/openai-compatible` module as it is compatible with the OpenAI API. You can install it with:
+
+<InstallPackages packages="@ai-sdk/openai-compatible" />
+
+## Provider Instance
+
+To use ModelRush, create a custom provider instance with the `createOpenAICompatible` function from `@ai-sdk/openai-compatible`:
+
+```ts
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+
+const modelrush = createOpenAICompatible({
+  name: 'modelrush',
+  apiKey: process.env.MODELRUSH_API_KEY,
+  baseURL: 'https://api.modelrush.ai/v1',
+});
+```
+
+<Note>
+  Follow the [ModelRush quickstart](https://modelrush.ai/docs/quickstart/) to
+  create an API key. Make sure to set the `MODELRUSH_API_KEY` environment
+  variable with your API key.
+</Note>
+
+## Language Models
+
+You can create ModelRush models using the provider instance. The first argument is a model ID from the [ModelRush model catalog](https://modelrush.ai/models), for example `modelrush/deepseek-v4-flash-0731`.
+
+```ts
+const model = modelrush('modelrush/deepseek-v4-flash-0731');
+```
+
+### Example
+
+You can use ModelRush language models to generate text with the `generateText` function:
+
+```ts
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import { generateText } from 'ai';
+
+const modelrush = createOpenAICompatible({
+  name: 'modelrush',
+  apiKey: process.env.MODELRUSH_API_KEY,
+  baseURL: 'https://api.modelrush.ai/v1',
+});
+
+const { text } = await generateText({
+  model: modelrush('modelrush/deepseek-v4-flash-0731'),
+  prompt: 'Tell me about yourself in one sentence.',
+});
+
+console.log(text);
+```
+
+ModelRush language models can also generate text in a streaming fashion with the `streamText` function:
+
+```ts
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import { streamText } from 'ai';
+
+const modelrush = createOpenAICompatible({
+  name: 'modelrush',
+  apiKey: process.env.MODELRUSH_API_KEY,
+  baseURL: 'https://api.modelrush.ai/v1',
+});
+
+const result = streamText({
+  model: modelrush('modelrush/deepseek-v4-flash-0731'),
+  prompt: 'Write a short haiku about routing.',
+});
+
+for await (const textPart of result.textStream) {
+  process.stdout.write(textPart);
+}
+```
+
+See the [ModelRush documentation](https://modelrush.ai/docs/) for endpoint details and model-specific capabilities.
