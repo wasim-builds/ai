@@ -232,7 +232,9 @@ const supportedExternalUrlMediaTypes = [
 const externalHttpsUrlPattern = /^https:\/\/.*$/;
 
 function supportsExternalFileUrls(modelId: string) {
-  return /(^|\/)gemini-/.test(modelId) && !/(^|\/)gemini-2\.0/.test(modelId);
+  return (
+    /(^|\/)gemini-2\.5/.test(modelId) || /(^|\/)gemini-3-flash-preview/.test(modelId)
+  );
 }
 
 /**
