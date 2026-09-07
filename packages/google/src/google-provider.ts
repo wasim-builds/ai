@@ -233,7 +233,8 @@ const externalHttpsUrlPattern = /^https:\/\/.*$/;
 
 function supportsExternalFileUrls(modelId: string) {
   return (
-    /(^|\/)gemini-2\.5/.test(modelId) || /(^|\/)gemini-3-flash-preview/.test(modelId)
+    /(^|\/)gemini-2\.5/.test(modelId) ||
+    /(^|\/)gemini-3-flash-preview/.test(modelId)
   );
 }
 
