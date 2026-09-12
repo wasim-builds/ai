@@ -612,9 +612,7 @@ export class OpenTelemetry implements Telemetry {
         spanType: 'operation',
         operationId: event.operationId,
         callId: event.callId,
-        runtimeContext: event.runtimeContext as
-          | Record<string, unknown>
-          | undefined,
+        runtimeContext: undefined,
       }),
       kind: SpanKind.CLIENT,
     });
@@ -635,9 +633,7 @@ export class OpenTelemetry implements Telemetry {
       settings: { maxRetries: event.maxRetries },
       provider: event.provider,
       modelId: event.modelId,
-      runtimeContext: event.runtimeContext as
-        | Record<string, unknown>
-        | undefined,
+      runtimeContext: undefined,
       baseSupplementalAttributes,
     });
   }
@@ -1296,9 +1292,7 @@ export class OpenTelemetry implements Telemetry {
         spanType: 'operation',
         operationId: event.operationId,
         callId: event.callId,
-        runtimeContext: event.runtimeContext as
-          | Record<string, unknown>
-          | undefined,
+        runtimeContext: undefined,
       }),
       kind: SpanKind.CLIENT,
     });
@@ -1319,8 +1313,12 @@ export class OpenTelemetry implements Telemetry {
       settings: { maxRetries: event.maxRetries },
       provider: event.provider,
       modelId: event.modelId,
-      runtimeContext: event.runtimeContext as
-        | Record<string, unknown>
+      runtimeContext: undefined,
+      baseSupplementalAttributes,
+    });
+  }
+
+  private onRerankOperationEnd(event: RerankEndEvent): void {
         | undefined,
       baseSupplementalAttributes,
     });
