@@ -306,7 +306,7 @@ describe('google-provider', () => {
     const provider = createGoogle({
       apiKey: 'test-api-key',
     });
-    provider('gemini-3.5-flash');
+    provider('gemini-3-flash-preview');
 
     const call = vi.mocked(GoogleBatchLanguageModel).mock.calls[0];
     const supportedUrlsFunction = call[1].supportedUrls;
@@ -372,6 +372,28 @@ describe('google-provider', () => {
       apiKey: 'test-api-key',
     });
     provider('gemini-2.0-flash');
+
+    const call = vi.mocked(GoogleBatchLanguageModel).mock.calls[0];
+    const supportedUrlsFunction = call[1].supportedUrls;
+
+    expect(supportedUrlsFunction).toBeDefined();
+
+    const supportedUrls = supportedUrlsFunction!() as Record<string, RegExp[]>;
+
+    expect(
+      isUrlSupported({
+        url: 'https://example.com/file.txt',
+        mediaType: 'text/plain',
+        supportedUrls,
+      }),
+    ).toBe(false);
+  });
+
+  it('should not support external HTTPS URLs for Gemini 3.1+ models', () => {
+    const provider = createGoogle({
+      apiKey: 'test-api-key',
+    });
+    provider('gemini-3.5-flash');
 
     const call = vi.mocked(GoogleBatchLanguageModel).mock.calls[0];
     const supportedUrlsFunction = call[1].supportedUrls;
