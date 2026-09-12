@@ -2,7 +2,7 @@ import {
   DefaultGeneratedFile,
   type GeneratedFile,
 } from '../generate-text/generated-file';
-import { InvalidArgumentError } from '../../error/invalid-argument-error';
+import { InvalidArgumentError } from '../error/invalid-argument-error';
 /**
  * A generated audio file.
  */
