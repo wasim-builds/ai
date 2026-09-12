@@ -1319,12 +1319,6 @@ export class OpenTelemetry implements Telemetry {
   }
 
   private onRerankOperationEnd(event: RerankEndEvent): void {
-        | undefined,
-      baseSupplementalAttributes,
-    });
-  }
-
-  private onRerankOperationEnd(event: RerankEndEvent): void {
     const state = this.getCallState(event.callId);
     if (!state?.rootSpan) return;
 
