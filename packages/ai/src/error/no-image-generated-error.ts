@@ -1,5 +1,5 @@
 import { AISDKError } from '@ai-sdk/provider';
-import type { GenerateImageCall } from '../generate-image/types';
+import type { GenerateImageCall } from '../generate-image/generate-image-result';
 import type { ImageModelResponseMetadata } from '../types/image-model-response-metadata';
 
 const name = 'AI_NoImageGeneratedError';
