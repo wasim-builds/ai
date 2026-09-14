@@ -45,7 +45,8 @@ export class DefaultGeneratedAudioFile
       throw new InvalidArgumentError({
         parameter: 'mediaType',
         value: mediaType,
-        message: 'Audio format must be provided or determinable from media type',
+        message:
+          'Audio format must be provided or determinable from media type',
       });
     }
 
