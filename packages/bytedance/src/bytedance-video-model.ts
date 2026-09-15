@@ -250,10 +250,11 @@ export class ByteDanceVideoModel implements VideoModelV4 {
     );
 
     if (startImage != null) {
+      const isFirstFrame = getFirstFrameImage(options) != null || lastFrameImageUrl != null;
       content.push({
         type: 'image_url',
         image_url: { url: convertImageModelFileToDataUri(startImage) },
-        ...(lastFrameImageUrl != null ? { role: 'first_frame' } : {}),
+        ...(isFirstFrame ? { role: 'first_frame' } : {}),
       });
     }
 
