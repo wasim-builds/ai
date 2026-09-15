@@ -4,6 +4,7 @@ import type {
 } from '@ai-sdk/provider';
 import {
   asSchema,
+  jsonSchema,
   type Experimental_SandboxSession as SandboxSession,
   type InferToolSetContext,
   type Tool,
@@ -52,7 +53,15 @@ export async function prepareTools<TOOLS extends ToolSet>({
         languageModelTools.push({
           type: 'function' as const,
           name,
-          inputSchema: await asSchema(tool.inputSchema).jsonSchema,
+          inputSchema: await asSchema(
+            tool.inputSchema !== undefined
+              ? tool.inputSchema
+              : 'parameters' in tool
+                ? (typeof (tool as any).parameters === 'function' || ('~standard' in (tool as any).parameters)
+                    ? (tool as any).parameters
+                    : jsonSchema((tool as any).parameters))
+                : undefined
+          ).jsonSchema,
           ...(description != null ? { description } : {}),
           ...(inputExamples != null ? { inputExamples } : {}),
           ...(providerOptions != null ? { providerOptions } : {}),
