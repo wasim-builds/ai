@@ -49,7 +49,6 @@ import {
   type OpenAICompatibleChatModelId,
 } from './openai-compatible-chat-language-model-options';
 import type { MetadataExtractor } from './openai-compatible-metadata-extractor';
-import { getOpenAILanguageModelCapabilities } from '@ai-sdk/openai/src/openai-language-model-capabilities';
 import { prepareTools } from './openai-compatible-prepare-tools';
 
 type OpenAICompatibleStreamingToolCallDelta = StreamingToolCallDelta & {
@@ -263,7 +262,7 @@ export class OpenAICompatibleChatLanguageModel implements LanguageModelV4 {
       providerOptions,
     );
 
-    return {
+    const result = {
       metadataKey,
       args: {
         // model id:
@@ -326,10 +325,25 @@ export class OpenAICompatibleChatLanguageModel implements LanguageModelV4 {
     };
 
     // reasoning models use max_completion_tokens instead of max_tokens
-    const modelCapabilities = getOpenAILanguageModelCapabilities(this.modelId);
-    if (modelCapabilities.isReasoningModel && result.args.max_tokens != null) {
-      if (result.args.max_completion_tokens == null) {
-        result.args.max_completion_tokens = result.args.max_tokens;
+    const baseModelId = this.modelId.split('/').pop() || this.modelId;
+    
+    let isReasoningModel = false;
+    const oMatch = /^o(\d+)(?:-|$)/.exec(baseModelId);
+    const oSeriesVersion = oMatch == null ? undefined : Number(oMatch[1]);
+    
+    const gptMatch = /^gpt-(\d+)(?:\.(\d+))?(?:-(.+))?$/.exec(baseModelId);
+    const gptVersion = gptMatch == null ? undefined : {
+      major: Number(gptMatch[1]),
+      minor: gptMatch[2] == null ? undefined : Number(gptMatch[2]),
+      variant: gptMatch[3],
+    };
+    const isGptChatModel = gptVersion?.minor == null && (gptVersion?.variant?.startsWith('chat') ?? false);
+    
+    isReasoningModel = oSeriesVersion != null || (gptVersion != null && gptVersion.major >= 5 && !isGptChatModel);
+
+    if (isReasoningModel && result.args.max_tokens != null) {
+      if ((result.args as any).max_completion_tokens == null) {
+        (result.args as any).max_completion_tokens = result.args.max_tokens;
       }
       result.args.max_tokens = undefined;
     }
