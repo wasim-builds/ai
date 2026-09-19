@@ -376,7 +376,7 @@ export async function experimental_generateVideo({
   // collect result videos, warnings, and response metadata
   const videos: Array<GeneratedFile> = [];
   const responses: Array<VideoModelResponseMetadata> = [];
-  const providerMetadata: SharedV4ProviderMetadata = {};
+  const providerMetadata: SharedV4ProviderMetadata = Object.create(null);
 
   for (const result of results) {
     for (const videoData of result.videos) {

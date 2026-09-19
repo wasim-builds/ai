@@ -14,16 +14,22 @@ const encoder = new TextEncoder();
  * insertion order. Used as the stable input to content hashing.
  */
 function canonicalJSON(value: unknown): string {
-  if (value == null || typeof value !== 'object') {
-    return JSON.stringify(value ?? null);
+  if (value === null || value === undefined) {
+    return JSON.stringify(value);
+  }
+  if (typeof value !== 'object') {
+    return JSON.stringify(value);
   }
   if (Array.isArray(value)) {
-    return `[${value.map(canonicalJSON).join(',')}]`;
+    return `[${value
+      .map(element => (element === undefined ? 'null' : canonicalJSON(element)))
+      .join(',')}]`;
   }
-  const record = value as Record<string, unknown>;
-  const entries = Object.keys(record)
-    .sort()
-    .map(k => `${JSON.stringify(k)}:${canonicalJSON(record[k])}`);
+  const keys = Object.keys(value as Record<string, unknown>).sort();
+  const entries = keys.map(
+    k =>
+      `${JSON.stringify(k)}:${canonicalJSON((value as Record<string, unknown>)[k])}`,
+  );
   return `{${entries.join(',')}}`;
 }
 

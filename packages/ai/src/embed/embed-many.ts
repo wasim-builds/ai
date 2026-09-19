@@ -406,7 +406,7 @@ export async function embedMany<RUNTIME_CONTEXT extends Context = Context>({
             tokens += result.usage.tokens;
             if (result.providerMetadata) {
               if (!providerMetadata) {
-                providerMetadata = { ...result.providerMetadata };
+                providerMetadata = Object.assign(Object.create(null), result.providerMetadata);
               } else {
                 for (const [providerName, metadata] of Object.entries(
                   result.providerMetadata,
