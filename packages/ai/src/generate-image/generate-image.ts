@@ -251,7 +251,7 @@ export async function generateImage({
   const calls: Array<GenerateImageCall> = [];
   const warnings: Array<Warning> = [];
   const responses: Array<ImageModelResponseMetadata> = [];
-  const providerMetadata: ImageModelV4ProviderMetadata = Object.create(null);
+  const providerMetadata: ImageModelV4ProviderMetadata = {};
   let totalUsage: ImageModelUsage = {
     inputTokens: undefined,
     outputTokens: undefined,
