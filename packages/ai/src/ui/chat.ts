@@ -262,7 +262,7 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
   private pendingMessagePreparations = new Set<AbortController>();
   private activeResponse: ActiveResponse<UI_MESSAGE> | undefined = undefined;
   private activeResumeRequest: ActiveResumeRequest | undefined = undefined;
-  private activeRequestPromises = new Set<Promise<void>>();
+  private activeRequestPromises = new Set<Promise<unknown>>();
   private jobExecutor = new SerialJobExecutor();
 
   constructor({

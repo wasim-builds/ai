@@ -630,9 +630,7 @@ export function convertToGoogleMessages(
                   content:
                     output.type === 'execution-denied'
                       ? (output.reason ?? 'Tool call execution denied.')
-                      : (sanitizeFunctionResponseContent(
-                          output.value,
-                        ) as any),
+                      : (sanitizeFunctionResponseContent(output.value) as any),
                 },
               },
             });
@@ -696,7 +694,8 @@ function sanitizeFunctionResponseContent(value: unknown): unknown {
   }
   const result: Record<string, unknown> = {};
   for (const [key, val] of Object.entries(value)) {
-    const sanitizedKey = key === '$ref' ? '_ref' : key === '$defs' ? '_defs' : key;
+    const sanitizedKey =
+      key === '$ref' ? '_ref' : key === '$defs' ? '_defs' : key;
     result[sanitizedKey] = sanitizeFunctionResponseContent(val);
   }
   return result;
