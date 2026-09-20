@@ -249,7 +249,10 @@ export abstract class HttpChatTransport<
 
     const api =
       preparedRequest?.api ??
-      appendPathToUrl(this.api, `/${options.chatId}/stream`);
+      appendPathToUrl(
+        this.api,
+        `/${encodeURIComponent(options.chatId)}/stream`,
+      );
     const headers =
       preparedRequest?.headers !== undefined
         ? normalizeHeaders(preparedRequest.headers)
