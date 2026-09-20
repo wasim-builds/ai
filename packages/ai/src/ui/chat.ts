@@ -620,7 +620,6 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
     }
     this.activeResumeRequest?.abortController.abort();
     this.activeResponse?.abortController.abort();
-
     await Promise.allSettled(Array.from(this.activeRequestPromises));
   };
 
@@ -840,6 +839,8 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
         },
       });
 
+
+
       if (isAbort) {
         if (isCurrentRequest()) {
           this.setStatus({ status: 'ready' });
@@ -898,6 +899,7 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
         }
 
         clearActiveResumeRequest();
+
       }
     }
 
