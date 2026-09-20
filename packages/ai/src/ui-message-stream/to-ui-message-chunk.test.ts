@@ -532,14 +532,14 @@ describe('toUIMessageChunk', () => {
           dynamic: true,
         },
         {
-          onError: () => 'should not be used for provider-executed errors',
+          onError: () => 'sanitized provider error',
           tools,
         },
       ),
     ).toEqual({
       type: 'tool-output-error',
       toolCallId: 'call-2',
-      errorText: '{"code":"provider-error"}',
+      errorText: 'sanitized provider error',
       providerExecuted: true,
       providerMetadata,
       toolMetadata,
