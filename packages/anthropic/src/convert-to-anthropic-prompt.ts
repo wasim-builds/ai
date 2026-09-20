@@ -700,11 +700,13 @@ export async function convertToAnthropicPrompt({
                   | undefined;
 
                 if (textMetadata?.type === 'compaction') {
-                  anthropicContent.push({
-                    type: 'compaction',
-                    content: part.text,
-                    cache_control: cacheControl,
-                  });
+                  if (part.text) {
+                    anthropicContent.push({
+                      type: 'compaction',
+                      content: part.text,
+                      cache_control: cacheControl,
+                    });
+                  }
                 } else {
                   anthropicContent.push({
                     type: 'text',
@@ -1339,10 +1341,12 @@ export async function convertToAnthropicPrompt({
           }
         }
 
-        messages.push({
-          role: 'assistant',
-          content: moveToolUseBlocksToEnd(anthropicContent),
-        });
+        if (anthropicContent.length > 0) {
+          messages.push({
+            role: 'assistant',
+            content: moveToolUseBlocksToEnd(anthropicContent),
+          });
+        }
 
         break;
       }
