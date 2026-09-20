@@ -262,6 +262,7 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
   private pendingMessagePreparations = new Set<AbortController>();
   private activeResponse: ActiveResponse<UI_MESSAGE> | undefined = undefined;
   private activeResumeRequest: ActiveResumeRequest | undefined = undefined;
+  private streamConsumptionPromise: Promise<void> | undefined = undefined;
   private jobExecutor = new SerialJobExecutor();
 
   constructor({
@@ -619,6 +620,7 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
     }
     this.activeResumeRequest?.abortController.abort();
     this.activeResponse?.abortController.abort();
+    await this.streamConsumptionPromise;
   };
 
   private async shouldSendAutomatically(): Promise<boolean> {
@@ -804,7 +806,7 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
           });
         });
 
-      await consumeStream({
+      this.streamConsumptionPromise = consumeStream({
         stream: processUIMessageStream({
           stream,
           onToolCall: this.onToolCall,
@@ -821,6 +823,8 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
           throw error;
         },
       });
+
+      await this.streamConsumptionPromise;
 
       if (isAbort) {
         if (isCurrentRequest()) {
@@ -880,6 +884,7 @@ export abstract class AbstractChat<UI_MESSAGE extends UIMessage> {
         }
 
         clearActiveResumeRequest();
+        this.streamConsumptionPromise = undefined;
       }
     }
 
